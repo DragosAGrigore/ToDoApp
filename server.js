@@ -1,5 +1,15 @@
+let config = require('./config');
+let mongodb = require('mongodb');
 let express = require('express');
 let app = express();
+
+let db;
+
+let connectionString = `mongodb+srv://${config.username}:${config.password}@cluster0.ray9g.mongodb.net/ToDoApp`;
+mongodb.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) {
+  db = client.db();
+  app.listen(3000);
+})
 
 app.get('/', function(req, res) {
     res.send(`<!DOCTYPE html>
@@ -27,21 +37,21 @@ app.get('/', function(req, res) {
           <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
             <span class="item-text">Fake example item #1</span>
             <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+              <button class="edit-me btn btn-secondary btn-sm mr-1">Update</button>
               <button class="delete-me btn btn-danger btn-sm">Delete</button>
             </div>
           </li>
           <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
             <span class="item-text">Fake example item #2</span>
             <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+              <button class="edit-me btn btn-secondary btn-sm mr-1">Update</button>
               <button class="delete-me btn btn-danger btn-sm">Delete</button>
             </div>
           </li>
           <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
             <span class="item-text">Fake example item #3</span>
             <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+              <button class="edit-me btn btn-secondary btn-sm mr-1">Update</button>
               <button class="delete-me btn btn-danger btn-sm">Delete</button>
             </div>
           </li>
@@ -52,5 +62,3 @@ app.get('/', function(req, res) {
     </body>
     </html>`);
 });
-
-app.listen(3000);
