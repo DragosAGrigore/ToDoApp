@@ -1,2 +1,2 @@
-# Personal Projects
-My personal projects will be pushed here.
+# To do App
+A short application where I just use a Node.js server and a MongoDB database in order to have a to do list.
