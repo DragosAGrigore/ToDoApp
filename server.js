@@ -3,13 +3,16 @@ let mongodb = require('mongodb');
 let express = require('express');
 let app = express();
 
+const ITEMS_KEY = "items";
 let db;
+
+app.use(express.urlencoded({extended: false}));
 
 let connectionString = `mongodb+srv://${config.username}:${config.password}@cluster0.ray9g.mongodb.net/ToDoApp`;
 mongodb.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) {
   db = client.db();
   app.listen(3000);
-})
+});
 
 app.get('/', function(req, res) {
     res.send(`<!DOCTYPE html>
@@ -61,4 +64,10 @@ app.get('/', function(req, res) {
       
     </body>
     </html>`);
+});
+
+app.post("/create-item", function(req, res) {
+  db.collection(ITEMS_KEY).insertOne({text: req.body.item}, function(err, doc) {
+    res.redirect('/');
+  })
 });
