@@ -69,3 +69,9 @@ app.post("/update-item", function(req, res) {
     res.send("Success");
   });
 });
+
+app.post("/delete-item", function(req, res) {
+  db.collection(ITEMS_KEY).deleteOne({ _id: mongodb.ObjectId(req.body.id)}, function(err, doc) {
+    res.send("Success");
+  });
+});
