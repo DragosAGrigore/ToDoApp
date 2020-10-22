@@ -31,15 +31,15 @@ app.get('/', function(req, res) {
         <h1 class="display-4 text-center py-1">To-Do App</h1>
         
         <div class="jumbotron p-3 shadow-sm">
-          <form action="/create-item" method="POST">
+          <form id="create-form" action="/create-item" method="POST">
             <div class="d-flex align-items-center">
-              <input name="item" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
+              <input id="create-field" name="item" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
               <button class="btn btn-primary">Add New Item</button>
             </div>
           </form>
         </div>
         
-        <ul class="list-group pb-5">
+        <ul id="item-list" class="list-group pb-5">
         ${items.map(item => {
           return `<li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
           <span class="item-text">${item.text}</span>
@@ -60,7 +60,7 @@ app.get('/', function(req, res) {
 
 app.post("/create-item", function(req, res) {
   db.collection(ITEMS_KEY).insertOne({ text: req.body.item }, function(err, doc) {
-    res.redirect('/');
+    res.json(doc.ops[0]);
   });
 });
 
