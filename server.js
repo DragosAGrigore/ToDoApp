@@ -6,15 +6,18 @@ let app = express();
 const ITEMS_KEY = "items";
 let db;
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 let connectionString = `mongodb+srv://${config.username}:${config.password}@cluster0.ray9g.mongodb.net/ToDoApp`;
-mongodb.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) {
+mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, client) {
   db = client.db();
   app.listen(3000);
 });
 
 app.get('/', function(req, res) {
+  db.collection(ITEMS_KEY).find().toArray(function (err, items) {
     res.send(`<!DOCTYPE html>
     <html>
     <head>
@@ -37,37 +40,32 @@ app.get('/', function(req, res) {
         </div>
         
         <ul class="list-group pb-5">
-          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-            <span class="item-text">Fake example item #1</span>
-            <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Update</button>
-              <button class="delete-me btn btn-danger btn-sm">Delete</button>
-            </div>
-          </li>
-          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-            <span class="item-text">Fake example item #2</span>
-            <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Update</button>
-              <button class="delete-me btn btn-danger btn-sm">Delete</button>
-            </div>
-          </li>
-          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-            <span class="item-text">Fake example item #3</span>
-            <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Update</button>
-              <button class="delete-me btn btn-danger btn-sm">Delete</button>
-            </div>
-          </li>
+        ${items.map(item => {
+          return `<li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+          <span class="item-text">${item.text}</span>
+          <div>
+            <button data-id=${item._id} class="update-me btn btn-secondary btn-sm mr-1">Update</button>
+            <button data-id=${item._id} class="delete-me btn btn-danger btn-sm">Delete</button>
+          </div>
+        </li>
+        `}).join('')}
         </ul>
-        
       </div>
-      
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      <script src="/browser.js"></script>
     </body>
     </html>`);
+  });
 });
 
 app.post("/create-item", function(req, res) {
-  db.collection(ITEMS_KEY).insertOne({text: req.body.item}, function(err, doc) {
+  db.collection(ITEMS_KEY).insertOne({ text: req.body.item }, function(err, doc) {
     res.redirect('/');
-  })
+  });
+});
+
+app.post("/update-item", function(req, res) {
+  db.collection(ITEMS_KEY).findOneAndUpdate({ _id: new mongodb.ObjectId(req.body.id) }, { $set: { text: req.body.text } }, function(err, doc) {
+    res.send("Success");
+  });
 });
