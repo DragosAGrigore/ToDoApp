@@ -1,4 +1,3 @@
-let config = require('./config');
 let mongodb = require('mongodb');
 let express = require('express');
 let sanitizeHTML = require('sanitize-html');
@@ -25,7 +24,7 @@ function passwordProtected(req, res, next) {
   }
 }
 
-let connectionString = `mongodb+srv://${config.username}:${config.password}@cluster0.ray9g.mongodb.net/ToDoApp`;
+let connectionString = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.ray9g.mongodb.net/ToDoApp`;
 mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, client) {
   db = client.db();
   app.listen(port);
