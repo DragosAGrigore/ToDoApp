@@ -9,6 +9,11 @@ function itemTemplate(item) {
       `
 }
 
+let itemList = document.getElementById("item-list");
+itemList.insertAdjacentHTML("beforeend", items.map(function(item) {
+    return itemTemplate(item)
+}).join(''));
+
 document.addEventListener("submit", function(event) {
     event.preventDefault();
     let inputField = document.getElementById("create-field");
@@ -17,8 +22,7 @@ document.addEventListener("submit", function(event) {
     inputField.focus();
     if (inputText) {
         axios.post("/create-item", { item: inputText }).then(function(response) {
-            let ul = document.getElementById("item-list");
-            ul.insertAdjacentHTML("beforeend", itemTemplate(response.data));
+            itemList.insertAdjacentHTML("beforeend", itemTemplate(response.data));
         }).catch(function(error) {
             alert("Something went wrong. Try again");
         })

@@ -53,17 +53,12 @@ app.get('/', function(req, res) {
         </div>
         
         <ul id="item-list" class="list-group pb-5">
-        ${items.map(item => {
-          return `<li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-          <span class="item-text">${item.text}</span>
-          <div>
-            <button data-id=${item._id} class="update-me btn btn-secondary btn-sm mr-1">Update</button>
-            <button data-id=${item._id} class="delete-me btn btn-danger btn-sm">Delete</button>
-          </div>
-        </li>
-        `}).join('')}
+
         </ul>
       </div>
+      <script>
+          let items = ${JSON.stringify(items)}
+      </script>
       <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
       <script src="/browser.js"></script>
     </body>
@@ -73,15 +68,13 @@ app.get('/', function(req, res) {
 
 app.post("/create-item", function(req, res) {
   let cleanText = sanitizeHTML(req.body.item);
-  console.log(cleanText);
   db.collection(ITEMS_KEY).insertOne({ text: cleanText }, function(err, doc) {
     res.json(doc.ops[0]);
   });
 });
 
 app.post("/update-item", function(req, res) {
-  let cleanText = sanitizeHTML(req.body.item);
-  console.log(cleanText);
+  let cleanText = sanitizeHTML(req.body.text);
   db.collection(ITEMS_KEY).findOneAndUpdate({ _id: new mongodb.ObjectId(req.body.id) }, { $set: { text: cleanText } }, function(err, doc) {
     res.send("Success");
   });
