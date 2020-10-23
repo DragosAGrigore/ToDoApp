@@ -8,6 +8,8 @@ let app = express();
 const ITEMS_KEY = "items";
 let db;
 
+let port = process.env.PORT || 3000;
+
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -26,7 +28,7 @@ function passwordProtected(req, res, next) {
 let connectionString = `mongodb+srv://${config.username}:${config.password}@cluster0.ray9g.mongodb.net/ToDoApp`;
 mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, client) {
   db = client.db();
-  app.listen(3000);
+  app.listen(port);
 });
 
 app.get('/', function(req, res) {
