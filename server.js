@@ -14,7 +14,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(passwordProtected);
+// app.use(passwordProtected);
 
 function passwordProtected(req, res, next) {
   res.set("WWW-Authenticate", "Basic realm='ToDo app'");
