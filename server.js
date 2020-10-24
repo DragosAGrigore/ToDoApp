@@ -15,14 +15,14 @@ app.use(express.json());
 
 // app.use(passwordProtected);
 
-// function passwordProtected(req, res, next) {
-//   res.set("WWW-Authenticate", "Basic realm='ToDo app'");
-//   if (req.headers.authorization === "Basic YWRtaW46YWRtaW4=") {
-//     next();
-//   } else {
-//     res.status(401).send("Forbidden.");
-//   }
-// }
+function passwordProtected(req, res, next) {
+  res.set("WWW-Authenticate", "Basic realm='ToDo app'");
+  if (req.headers.authorization === "Basic YWRtaW46YWRtaW4=") {
+    next();
+  } else {
+    res.status(401).send("Forbidden.");
+  }
+}
 
 let connectionString = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.ray9g.mongodb.net/ToDoApp`;
 mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true }, function(err, client) {
