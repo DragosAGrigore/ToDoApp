@@ -2,6 +2,9 @@
 A short application where I just use a Node.js server and a MongoDB database in order to have a to do list.
 
 # Credentials
+
+In case of asking for credentials, the values can be taken from here:
+
 | Key | Value |
 | ------ | ------ |
 | Username | admin |
